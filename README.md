@@ -139,7 +139,7 @@ Unfortunately, as of 2021-07-18, there is no patched ETS version available. Ther
     - Encrypt the entire hard drive with Windows BitLocker or a third-party software like VeraCrypt.
 - Pros:
     - All data on the hard drive is encrypted and inaccessible to attackers as long as the device is turned off. This assumes that a complex password was used.
-    - Windows already provides an easy-to-use solution with BitLocker on certain Windows versions, and open source software are also readily available.
+    - Windows already provides an easy-to-use solution with BitLocker on certain Windows versions, and open source software solutions are also readily available.
 - Cons:
     - It does not provide confidentiality while the computer is running. If an attacker is able to gain access to one of the user accounts / exploit an RCE, they are able to access the project information as plaintext.
 
