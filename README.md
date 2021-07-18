@@ -180,7 +180,7 @@ The project is distributed under the [MIT license](./LICENSE).
 
 ### 1.0.0 - 2021-07-18
 **Commit hash:** 
-- [e60c93d9b73903f16fc82bc6de2791719b295218](https://github.com/robertguetzkow/ets5-password-recovery/commit/e60c93d9b73903f16fc82bc6de2791719b295218)
+- [c6a3750cefa74d84c5886097cdd0f30dc1bd0dd1](https://github.com/robertguetzkow/ets5-password-recovery/commit/c6a3750cefa74d84c5886097cdd0f30dc1bd0dd1)
 
 **Download:** 
 - [Source code](https://github.com/robertguetzkow/ets5-password-recovery/archive/refs/tags/v1.0.0.zip)
