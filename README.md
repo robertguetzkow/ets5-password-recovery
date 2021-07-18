@@ -165,10 +165,10 @@ Unfortunately, as of 2021-07-18, there is no patched ETS version available. Ther
 
 ## Coordinated Vulnerability Disclosure
 
-2021-06-26 - Issue reported to the KNX Association
-2021-07-09 - KNX Association confirmed issue
-2021-07-12 - KNX Association permitted immediate disclosure
-2021-07-19 - Public disclosure
+- 2021-06-26 - Issue reported to the KNX Association
+- 2021-07-09 - KNX Association confirmed issue
+- 2021-07-12 - KNX Association permitted immediate disclosure
+- 2021-07-18 - Public disclosure
 
 The KNX Association plans to address the issue in the ETS6 which has not been publicly released at the time of writing. According to Joost Demarest, CTO and CFO of the KNX Association, ETS5 will not receive any patches as development for that version has already been concluded. He permitted immediate publication of the issue on 2021-07-12, forgoing the offered 90 days delay for the disclosure.
 
@@ -178,7 +178,7 @@ The project is distributed under the [MIT license](./LICENSE).
 
 ## Change log
 
-### 1.0.0 - 2021-07-19
+### 1.0.0 - 2021-07-18
 **Commit hash:** 
 - [e60c93d9b73903f16fc82bc6de2791719b295218](https://github.com/robertguetzkow/ets5-password-recovery/commit/e60c93d9b73903f16fc82bc6de2791719b295218)
 
