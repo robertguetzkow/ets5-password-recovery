@@ -2,21 +2,21 @@
 
 ## Table of Contents
 
-[Introduction](#introduction)
-[Installation](#installation)
-[Requirements](#requirements)
-[How does the password recovery work?](#how-does-the-password-recovery-work?)
-[How was the design flaw discovered?](#how-was-the-design-flaw-discovered?)
-[How can the risk be mitigated?](#how-can-the-risk-be-mitigated?)
-[Coordinated Vulnerability Disclosure](#coordinated-vulnerability-disclosure)
-[License](#license)
-[Change log](#change-log)
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Requirements](#requirements)
+- [How does the password recovery work?](#how-does-the-password-recovery-work)
+- [How was the design flaw discovered?](#how-was-the-design-flaw-discovered)
+- [How can the risk be mitigated?](#how-can-the-risk-be-mitigated)
+- [Coordinated Vulnerability Disclosure](#coordinated-vulnerability-disclosure)
+- [License](#license)
+- [Change log](#change-log)
 
 ## Introduction
 
 Have you forgotten the password to one of your ETS5 projects and cannot access the configuration for the KNX installation anymore? The ETS5 Password Recovery Tool allows you to retrieve the project password and other secrets saved in the project store of the ETS5. This is possible because the ETS5 has a significant design flaw, it uses a hard-coded key to encrypt the project information. 
 
-![Command prompt](https://github.com/robertguetzkow/ets5-password-recovery/blob/master/imgs/cmd.svg)
+![Command prompt](./imgs/cmd.svg)
 
 Storing cryptographic secrets in source code is ill-advised because they can be recovered by reverse engineering the software, thus offering little more protection than storing the information as cleartext. This can pose a threat to the security of the KNX installations. If an attacker is able to gain access to the files in the project store, they can decrypt them despite not knowing the project password. The information contained within allow to eaves-drop on, impersonate and reconfigure KNX devices. This is particularly problematic, because the ETS5 gives the users the impression that project password would be used to encrypt the project information, not just for exported projects. Hence, it is likely that many users and system integrators have not taken additional steps to ensure the confidentiality of the project store. If the ETS5 would properly implement the encryption and a strong project password is chosen, it would provide a harder challenge for an attacker, even if they managed to get remote access to the computer.
 
@@ -48,7 +48,7 @@ The process for the deobfuscation is:
 4. Decrypt the decoded attribute using AES-128 in CBC mode with the key and IV from step 3.
 5. The result of the decryption is the original value of the attribute.
 
-An implementation of the deobfuscation can be found in the [Deobfuscator.cs](https://github.com/robertguetzkow/ets5-password-recovery/blob/master/ETS5PasswordRecovery/ETS5PasswordRecovery/Deobfuscator.cs) file. Since the password and salt are constant, it would be possible to precompute the key and IV to skip the key derivation. This is not done in the implementation of this software, as it is meant to show all steps of the deobfuscation. However, if you need the key and IV, they are listed below.
+An implementation of the deobfuscation can be found in the [Deobfuscator.cs](./ETS5PasswordRecovery/ETS5PasswordRecovery/Deobfuscator.cs) file. Since the password and salt are constant, it would be possible to precompute the key and IV to skip the key derivation. This is not done in the implementation of this software, as it is meant to show all steps of the deobfuscation. However, if you need the key and IV, they are listed below.
 
 |     | Hex                                                                | Base64                                         |
 | --- |------------------------------------------------------------------- | ---------------------------------------------- |
@@ -122,8 +122,11 @@ The last point clearly indicated that the project password was not used in the a
 </Area>
 ```
 
-As the observations strongly hinted at the use of an insecure approach, possibly due to the use of a hard-coded cryptographic key, it was necessary to investigate how the attribute values were modified. The intention was to identify a potential security flaw, which could then be reported to the vendor and have it fixed, improving the security for all users. Assessing whether the implementation provides adequate confidentiality meant the ETS5 had to be reverse engineered. Since the ETS5 is based on the .NET framework, which was immediately apparent from the DLLs used, decompiling could be easily accomplished through [ILSpy](https://github.com/icsharpcode/ILSpy). The binary had been obfuscated with Dotfuscator, presumably to make reverse engineering efforts more difficult. However, class and function names were surprisingly left mostly intact. Hence, the chosen approach was to search for classes and functions which seemed related to processing the XML files, encryption, decryption, obfuscation, deobfuscation, keys or passwords. This led to the discovery of `Knx.Ets.ObjectModel.Import.PasswordDescrambler.Scramble` and `Knx.Ets.ObjectModel.Import.Encryption.EncryptString`, that are called on the obfuscated values of attributes stored in the XML files. There was no key material being passed into the functions, it only used constant values to derive a key which was then utilized to encrypt / decrypt the attributes using AES-128 in CBC mode. It was apparent that a hard-coded cryptographic key was used. The Dotfuscator changed the control flow and inserted superfluous operations, but the calls to the functions from the .NET framework could not be hidden. Thus, it was possible to write a specification for the (de-)obfuscation at this stage for a semi-clean-room approach. The only missing part was the string used in the key derivation that had been obscured by dotfuscator. [De4dot](https://github.com/de4dot/de4dot) was chosen to reverse the string obfuscation, which revealed the `ETS5Password` password. The IV was already readable prior to applying De4dot as it had been defined as a byte sequence. Due to personal curiosity, it was discovered that those were not random bytes, but actually the ASCII / UTF-8 byte representation of the string `Ivan Medvedev`.
-Since the design flaw poses a risk to KNX installations, the issue had to be reported to the KNX Association. A proof of concept implementation was needed to ensure that the issue could be demonstrated, if asked for. To avoid any copyright violations, the proof of concept was implemented based on the specification that had been noted. This was done to avoid any reuse of code from the original software. The application of Dotfuscator also made sure that the original and even unobfuscated code were unusable for a clean implementation anyway, which ensured that even unintentional copying of the original was unlikely.
+As the observations strongly hinted at the use of an insecure approach, possibly due to the use of a hard-coded cryptographic key, it was necessary to investigate how the attribute values were modified. The intention was to identify a potential security flaw, which could then be reported to the vendor and have it fixed, improving the security for all users. Assessing whether the implementation provides adequate confidentiality meant the ETS5 had to be reverse engineered. 
+
+Since the ETS5 is based on the .NET framework, which was immediately apparent from the DLLs used, decompiling could be easily accomplished through [ILSpy](https://github.com/icsharpcode/ILSpy). The binary had been obfuscated with Dotfuscator, presumably to make reverse engineering efforts more difficult. However, class and function names were surprisingly left mostly intact. Hence, the chosen approach was to search for classes and functions which seemed related to processing the XML files, encryption, decryption, obfuscation, deobfuscation, keys or passwords. This led to the discovery of `Knx.Ets.ObjectModel.Import.PasswordDescrambler.Scramble` and `Knx.Ets.ObjectModel.Import.Encryption.EncryptString`, that are called on the obfuscated values of attributes stored in the XML files. There was no key material being passed into the functions, it only used constant values to derive a key which was then utilized to encrypt / decrypt the attributes using AES-128 in CBC mode. It was apparent that a hard-coded cryptographic key was used. The Dotfuscator changed the control flow and inserted superfluous operations, but the calls to the functions from the .NET framework could not be hidden. Thus, it was possible to write a specification for the (de-)obfuscation at this stage for a semi-clean-room approach. The only missing part was the string used in the key derivation that had been obscured by dotfuscator. [De4dot](https://github.com/de4dot/de4dot) was chosen to reverse the string obfuscation, which revealed the `ETS5Password` password. The IV was already readable prior to applying De4dot as it had been defined as a byte sequence. Due to personal curiosity, it was discovered that those were not random bytes, but actually the ASCII / UTF-8 byte representation of the string `Ivan Medvedev`.
+
+As the design flaw poses a risk to KNX installations, the issue had to be reported to the KNX Association. A proof of concept implementation was needed to ensure that the issue could be demonstrated, if asked for. To avoid any copyright violations, the proof of concept was implemented based on the specification that had been noted. This was done to avoid any reuse of code from the original software. The application of Dotfuscator also made sure that the original and even unobfuscated code were unusable for a clean implementation anyway, which ensured that even unintentional copying of the original was unlikely.
 
 For details on the coordinated disclosure following the development of the proof of concept, see the section [Coordinated Vulnerability Disclosure](#coordinated-vulnerability-disclosure).
 
@@ -171,13 +174,13 @@ The KNX Association plans to address the issue in the ETS6 which has not been pu
 
 ## License
 
-The project is distributed under the [MIT license](https://github.com/robertguetzkow/ets5-password-recovery/blob/master/LICENSE).
+The project is distributed under the [MIT license](./LICENSE).
 
 ## Change log
 
 ### 1.0.0 - 2021-07-19
 **Commit hash:** 
-- [ToDo]()
+- [e60c93d9b73903f16fc82bc6de2791719b295218](https://github.com/robertguetzkow/ets5-password-recovery/commit/e60c93d9b73903f16fc82bc6de2791719b295218)
 
 **Download:** 
 - [Source code](https://github.com/robertguetzkow/ets5-password-recovery/archive/refs/tags/v1.0.0.zip)
