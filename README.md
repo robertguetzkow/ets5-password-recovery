@@ -14,7 +14,7 @@
 
 ## Introduction
 
-Have you forgotten the password to one of your ETS5 projects and cannot access the configuration for the KNX installation anymore? The ETS5 Password Recovery Tool allows you to retrieve the project password and other secrets saved in the project store of the ETS5. This is possible because the ETS5 has a significant design flaw, it uses a hard-coded key to encrypt the project information. 
+Have you forgotten the password to one of your ETS5 projects and cannot access the configuration for the KNX installation anymore? The ETS5 Password Recovery Tool allows you to retrieve the project password and other secrets saved in the project store of the ETS5. This is possible because the ETS5 has a significant design flaw, it uses a hard-coded key to encrypt the project information ([CVE-2021-36799](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-36799)). 
 
 ![Command prompt](./imgs/cmd.svg)
 
@@ -169,6 +169,7 @@ Unfortunately, as of 2021-07-18, there is no patched ETS version available. Ther
 - 2021-07-09 - KNX Association confirmed issue
 - 2021-07-12 - KNX Association permitted immediate disclosure
 - 2021-07-18 - Public disclosure
+- 2021-07-19 - [CVE-2021-36799](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-36799) assigned
 
 The KNX Association plans to address the issue in the ETS6 which has not been publicly released at the time of writing. According to Joost Demarest, CTO and CFO of the KNX Association, ETS5 will not receive any patches as development for that version has already been concluded. He permitted immediate publication of the issue on 2021-07-12, forgoing the offered 90 days delay for the disclosure.
 
