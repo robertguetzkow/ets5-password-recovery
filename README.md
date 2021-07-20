@@ -20,6 +20,15 @@ Have you forgotten the password to one of your ETS5 projects and cannot access t
 
 Storing cryptographic secrets in source code is ill-advised because they can be recovered by reverse engineering the software, thus offering little more protection than storing the information as cleartext. This can pose a threat to the security of the KNX installations. If an attacker is able to gain access to the files in the project store, they can decrypt them despite not knowing the project password. The information contained within allow to eaves-drop on, impersonate and reconfigure KNX devices. This is particularly problematic, because the ETS5 gives the users the impression that project password would be used to encrypt the project information, not just for exported projects. Hence, it is likely that many users and system integrators have not taken additional steps to ensure the confidentiality of the project store. If the ETS5 would properly implement the encryption and a strong project password is chosen, it would provide a harder challenge for an attacker, even if they managed to get remote access to the computer.
 
+The following confidential information are improperly encrypted:
+- Project passwords
+- FDSKs
+- Backbone keys
+- Device authentication codes and derived keys
+- Device management passwords and derived keys
+- User / tunneling passwords and derived keys
+- Tool keys
+
 The ETS5 Password Recovery Tool is a proof of concept that demonstrates the issue by decrypting and displaying the sensitive information. It was developed as part of the [coordinated vulnerability disclosure](#coordinated-vulnerability-disclosure) and is released with permission by the KNX Association. Publishing the tool serves the following purposes:
 1. It publicly documents the security issue, thus allowing users to take precautions to mitigate the risks.
 2. The KNX Association decided to only address the issue in the ETS6, which has not been publicly released at the time of writing. Raising awareness about the design flaw might change their mind to provide a patch for the ETS5 as well.
@@ -43,7 +52,7 @@ Contrary to what the user interface suggests, the ETS5 does not encrypt your loc
 The process for the deobfuscation is:
 
 1. The obfuscated attribute is Base64 encoded and needs to be decoded, see RFC 4648.
-2. Get the byte representation of `Ivan Medvedev` as ASCII or UTF-8 encoded strings.
+2. Get the byte representation of `Ivan Medvedev` as ASCII or UTF-8 encoded string.
 3. Use the key derivation function implemented by [PasswordDeriveBytes](https://referencesource.microsoft.com/#mscorlib/system/security/cryptography/passwordderivebytes.cs) in the .NET Framework. [It is based on PBKDF1, but adds a counter to the key derivation algorithm](https://crypto.stackexchange.com/questions/22271/what-is-the-algorithm-behind-passwordderivebytes). In the ETS5 it is used with SHA-1 as hash function, 100 iterations, `ETS5Password` as password and the byte representation of `Ivan Medvedev` as salt. The first 32 bytes of the key derivation output will be used as key and the following 16 bytes as IV.
 4. Decrypt the decoded attribute using AES-256 in CBC mode with the key and IV from step 3.
 5. The result of the decryption is the original value of the attribute.
