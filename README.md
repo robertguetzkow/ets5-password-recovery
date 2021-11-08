@@ -31,7 +31,7 @@ The following confidential information are improperly encrypted:
 
 The ETS5 Password Recovery Tool is a proof of concept that demonstrates the issue by decrypting and displaying the sensitive information. It was developed as part of the [coordinated vulnerability disclosure](#coordinated-vulnerability-disclosure) and is released with permission by the KNX Association. Publishing the tool serves the following purposes:
 1. It publicly documents the security issue, thus allowing users to take precautions to mitigate the risks.
-2. The KNX Association decided to only address the issue in the ETS6, which has not been publicly released at the time of writing. Raising awareness about the design flaw might change their mind to provide a patch for the ETS5 as well.
+2. The KNX Association does not plan to fix the issue in current or future versions of the ETS. Raising awareness about the design flaw might change their mind.
 3. Disclosing the design flaw hopefully encourages the KNX Association and anyone reading this document to adopt better software engineering practices.
 4. The ETS5 Password Recovery Tool could actually be useful in case someone forgot the password to their own project.
 
@@ -180,7 +180,10 @@ Unfortunately, as of 2021-07-18, there is no patched ETS version available. Ther
 - 2021-07-18 - Public disclosure
 - 2021-07-19 - [CVE-2021-36799](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-36799) assigned
 
-The KNX Association plans to address the issue in the ETS6 which has not been publicly released at the time of writing. According to Joost Demarest, CTO and CFO of the KNX Association, ETS5 will not receive any patches as development for that version has already been concluded. He permitted immediate publication of the issue on 2021-07-12, forgoing the offered 90 days delay for the disclosure.
+According to Joost Demarest, CTO and CFO of the KNX Association, ETS5 will not receive any patches as development for that version has already been concluded. He permitted immediate publication of the issue on 2021-07-12, forgoing the offered 90 days delay for the disclosure.
+
+### Update 2021-11-08
+Due to a misunderstanding the README previously claimed that the KNX Association plans to address the issue in ETS6. This is not the case. The KNX Association has clarified that they do not plan to fix this issue as they do not consider it the responsibility of the ETS to securely store cryptographic key material when it is not being exported.
 
 ## License
 
