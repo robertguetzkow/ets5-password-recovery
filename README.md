@@ -31,7 +31,7 @@ The following confidential information are improperly encrypted:
 
 The ETS5 Password Recovery Tool is a proof of concept that demonstrates the issue by decrypting and displaying the sensitive information. It was developed as part of the [coordinated vulnerability disclosure](#coordinated-vulnerability-disclosure) and is released with permission by the KNX Association. Publishing the tool serves the following purposes:
 1. It publicly documents the security issue, thus allowing users to take precautions to mitigate the risks.
-2. The KNX Association does not plan to fix the issue in current or future versions of the ETS. Raising awareness about the design flaw might change their mind.
+2. ~~The KNX Association does not plan to fix the issue in current or future versions of the ETS. Raising awareness about the design flaw might change their mind.~~ (see [coordinated vulnerability disclosure](#coordinated-vulnerability-disclosure) section for an update)
 3. Disclosing the design flaw hopefully encourages the KNX Association and anyone reading this document to adopt better software engineering practices.
 4. The ETS5 Password Recovery Tool could actually be useful in case someone forgot the password to their own project.
 
@@ -184,6 +184,9 @@ According to Joost Demarest, CTO and CFO of the KNX Association, ETS5 will not r
 
 ### Update 2021-11-08
 Due to a misunderstanding the README previously claimed that the KNX Association plans to address the issue in ETS6. This is not the case. The KNX Association has clarified that they do not plan to fix this issue, as they do not consider it the responsibility of the ETS to securely store cryptographic key material when it is not being exported.
+
+### Update 2021-11-10
+The KNX Association has contacted me and explained that they have revised their plans. They now intend to document the shortcomings of the current ETS version and properly encrypt the project store in a future version of ETS6.
 
 ## License
 
