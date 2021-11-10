@@ -183,7 +183,7 @@ Unfortunately, as of 2021-07-18, there is no patched ETS version available. Ther
 According to Joost Demarest, CTO and CFO of the KNX Association, ETS5 will not receive any patches as development for that version has already been concluded. He permitted immediate publication of the issue on 2021-07-12, forgoing the offered 90 days delay for the disclosure.
 
 ### Update 2021-11-08
-Due to a misunderstanding the README previously claimed that the KNX Association plans to address the issue in ETS6. This is not the case. The KNX Association has clarified that they do not plan to fix this issue, as they do not consider it the responsibility of the ETS to securely store cryptographic key material when it is not being exported.
+Due to a misunderstanding the README previously claimed that the KNX Association plans to address the issue in ETS6. This is not the case. The KNX Association has clarified on 2021-10-25 that they do not plan to fix this issue, as they do not consider it the responsibility of the ETS to securely store cryptographic key material when it is not being exported.
 
 ### Update 2021-11-10
 The KNX Association has contacted me and explained that they have revised their plans. They now intend to document the shortcomings of the current ETS version and properly encrypt the project store in a future version of ETS6.
