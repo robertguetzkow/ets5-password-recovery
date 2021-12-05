@@ -55,7 +55,7 @@ The process for the deobfuscation is:
 2. Get the byte representation of `Ivan Medvedev` as ASCII or UTF-8 encoded string.
 3. Use the key derivation function implemented by [PasswordDeriveBytes](https://referencesource.microsoft.com/#mscorlib/system/security/cryptography/passwordderivebytes.cs) in the .NET Framework. [It is based on PBKDF1, but adds a counter to the key derivation algorithm](https://crypto.stackexchange.com/questions/22271/what-is-the-algorithm-behind-passwordderivebytes). In the ETS5 it is used with SHA-1 as hash function, 100 iterations, `ETS5Password` as password and the byte representation of `Ivan Medvedev` as salt. The first 32 bytes of the key derivation output will be used as key and the following 16 bytes as IV.
 4. Decrypt the decoded attribute using AES-256 in CBC mode with the key and IV from step 3.
-5. The result of the decryption is the original value of the attribute.
+5. Remove the PKCS#7 padding and the result is the original value of the attribute.
 
 An implementation of the deobfuscation can be found in the [Deobfuscator.cs](./ETS5PasswordRecovery/ETS5PasswordRecovery/Deobfuscator.cs) file. Since the password and salt are constant, it would be possible to precompute the key and IV to skip the key derivation. This is not done in the implementation of this software, as it is meant to show all steps of the deobfuscation. However, if you need the key and IV, they are listed below.
 
