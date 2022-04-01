@@ -39,7 +39,9 @@ The ETS5 Password Recovery Tool is a proof of concept that demonstrates the issu
 
 ## Installation
 
-The executable can be downloaded from the [release section](https://github.com/robertguetzkow/ets5-password-recovery/releases). It does not need to be installed and can be placed in any directory of choice. 
+The executable can be downloaded from the [release section](https://github.com/robertguetzkow/ets5-password-recovery/releases). It does not need to be installed and can be placed in any directory of choice.
+
+Alternatively, if you do not want to run an untrusted binary on your system, you can decrypt individual attributes for the project's XML files on the [CyberChef](https://gchq.github.io/CyberChef/#recipe=From_Base64%28'A-Za-z0-9%2B/%3D',true%29AES_Decrypt%28%7B'option':'Hex','string':'22BD16CDBB96B0E18E977BB3FEFADD8886E7E38A2F8A6FD9D2F2F5663AC20371%5Ct'%7D,%7B'option':'Hex','string':'8E977BB3FEFADD88E6AE6CBEAE3E7CAF'%7D,'CBC','Raw','Raw',%7B'option':'Hex','string':''%7D,%7B'option':'Hex','string':''%7D%29Decode_text%28'UTF-16LE%20%281200%29'%29) website.
 
 ## Requirements
 
